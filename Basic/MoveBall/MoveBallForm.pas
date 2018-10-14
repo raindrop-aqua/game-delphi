@@ -16,9 +16,9 @@ type
     procedure FormCreate(Sender: TObject);
   private
     { private 宣言 }
-    vx, vy: Single;
-    xMax, xMin: Single;
-    yMax, yMin: Single;
+    vx, vy: Single; // 動きの量
+    xMax, xMin: Single; // ボールが動く範囲（X軸）
+    yMax, yMin: Single; // ボールが動く範囲（Y軸）
   public
     { public 宣言 }
   end;
@@ -38,6 +38,8 @@ end;
 
 procedure TfrmMoveBall.FormResize(Sender: TObject);
 begin
+  // ウィンドウサイズが変わったときに
+  // ボールが動く範囲をアップデートする
   xMin := 0;
   yMin := 0;
   xMax := frmMoveBall.ClientWidth - Circle1.Width;
@@ -48,9 +50,15 @@ procedure TfrmMoveBall.Timer1Timer(Sender: TObject);
 var
   newX, newY: Single;
 begin
+  // ボールの位置を算出
   newX := Circle1.Position.X + vx;
   newY := Circle1.Position.Y + vy;
 
+  // ボールの位置を更新
+  Circle1.Position.X := newX;
+  Circle1.Position.Y := newY;
+
+  // 壁にぶつかったときにボールの移動方向を変更する
   if (newX <= xMin) then
   begin
     vx := abs(vx);
@@ -69,8 +77,6 @@ begin
     vy := abs(vy) * -1;
   end;
 
-  Circle1.Position.X := newX;
-  Circle1.Position.Y := newY;
 end;
 
 end.
